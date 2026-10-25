@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'product:list' %}">eCommerce</a>
+    <ul class="navbar-nav me-auto">
+      <li class="nav-item">
+        <a class="nav-link {% if active == 'products' %}active{% endif %}" href="{% url 'product:list' %}">Productos</a>
+      </li>
+      {% if user.is_staff %}
+        <li class="nav-item">
+          <a class="nav-link {% if active == 'sales' %}active{% endif %}" href="{% url 'sales:sales' %}">Ventas</a>
+        </li>
+      {% endif %}
+    </ul>
+    {% if user.is_authenticated %}
+      <span class="navbar-text">{{ "Hola, "|add:user.username|title }}</span>
+    {% else %}
+      <a class="btn btn-outline-light btn-sm {% if active == 'register' %}active{% endif %}" href="{% url 'accounts:register' %}">Crear cuenta</a>
+    {% endif %}
+  </div>
+</nav>

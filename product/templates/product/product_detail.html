@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name|title }}{% endblock %}
+
+{% block content %}
+  {% include "includes/page_header.html" with title=product.name|title subtitle=product.description|capfirst %}
+
+  <div class="row mb-5">
+    <div class="col-md-6">
+      {% include "product/includes/product_card.html" with product=product show_description=False hide_button=True %}
+    </div>
+  </div>
+
+  <h2 class="h4">También te puede interesar</h2>
+  <div class="row g-3">
+    {% for related in related_products %}
+      <div class="col-sm-6 col-lg-4">
+        {% include "product/includes/product_card.html" with product=related button_text="Ver este producto" button_style="outline-primary" %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <a href="{% url 'product:list' %}" class="btn btn-link mt-4 px-0">&larr; Volver a productos</a>
+{% endblock %}

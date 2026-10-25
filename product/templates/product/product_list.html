@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Productos{% endblock %}
+
+{% block content %}
+  {% include "includes/page_header.html" with title="Nuestros productos" subtitle="Precios actualizados al "|add:today_text %}
+
+  <p>Tenemos {{ products|length }} producto{{ products|length|pluralize }} disponible{{ products|length|pluralize }}. Cada 3 productos te mostramos uno destacado.</p>
+
+  <div class="row g-3 mb-5">
+    {% for product in products %}
+      <div class="col-sm-6 col-lg-4">
+        {% include "product/includes/product_card.html" with product=product featured=forloop.counter|divisibleby:3 show_description=True %}
+      </div>
+    {% empty %}
+      <p>No hay productos disponibles.</p>
+    {% endfor %}
+  </div>
+
+  <h2 class="h4">Lista de precios</h2>
+  <table class="table table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Producto</th>
+        <th>Precio</th>
+        <th>Estado</th>
+        <th>Alta</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+        <tr class="{% cycle 'table-light' 'table-secondary' %}">
+          <td>{{ forloop.counter }}</td>
+          <td>
+            {{ product.name|upper }}
+            {% if forloop.first %}<span class="badge bg-primary">Primero</span>{% endif %}
+            {% if forloop.last %}<span class="badge bg-secondary">Último</span>{% endif %}
+          </td>
+          <td>${{ product.price|floatformat:2 }}</td>
+          <td>{{ product.active|yesno:"Disponible,No disponible" }}</td>
+          <td>{{ product.created_at|date:"d/m/Y" }}</td>
+        </tr>
+        {% if forloop.counter|divisibleby:3 and not forloop.last %}
+          <tr class="table-warning">
+            <td colspan="5" class="text-center small">Llevas {{ forloop.counter }} productos vistos</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

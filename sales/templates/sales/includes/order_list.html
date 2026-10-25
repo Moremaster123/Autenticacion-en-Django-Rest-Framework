@@ -1,0 +1,10 @@
+<h5>{{ title }}</h5>
+{% for order in orders %}
+  <ul class="list-group mb-2">
+    <li class="list-group-item">Orden: {{ order.id }}</li>
+    <li class="list-group-item">Total: ${{ order.total|floatformat:2 }}</li>
+    <li class="list-group-item">Actualizada: {{ order.updated_at|date:"d/m/Y H:i" }}</li>
+  </ul>
+{% empty %}
+  <p>{{ empty_text }}</p>
+{% endfor %}

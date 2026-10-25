@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Ventas{% endblock %}
+
+{% block content %}
+  {% include "includes/page_header.html" with title="Ventas" %}
+
+  <div class="row mb-4">
+    <div class="col-md-4 mb-2">
+      {% include "sales/includes/stat_card.html" with label="Total vendido" value=total_sales|floatformat:2 prefix="$" %}
+    </div>
+    <div class="col-md-4 mb-2">
+      {% include "sales/includes/stat_card.html" with label="Órdenes" value=orders.count %}
+    </div>
+    <div class="col-md-4 mb-2">
+      {% include "sales/includes/stat_card.html" with label="Productos vendidos" value=products_sold %}
+    </div>
+  </div>
+
+  <p id="chartError" class="alert alert-danger" style="display: none;"></p>
+
+  <div class="row mb-4">
+    <div class="col-md-8 mb-2">
+      <div class="card">
+        <div class="card-body">
+          <h5>Ventas de los últimos 7 días</h5>
+          <canvas id="salesChart" data-url="{% url 'sales:sales-data' %}"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-2">
+      <div class="card">
+        <div class="card-body">
+          <h5>Órdenes por estado</h5>
+          <canvas id="statusChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      {% include "sales/includes/order_list.html" with title="Órdenes recientes" orders=recent_orders empty_text="No hay órdenes recientes." %}
+    </div>
+    <div class="col-md-4">
+      {% include "sales/includes/order_list.html" with title="Órdenes enviadas" orders=shipped_orders empty_text="No hay órdenes enviadas." %}
+    </div>
+    <div class="col-md-4">
+      {% include "sales/includes/order_list.html" with title="Órdenes pagadas" orders=paid_orders empty_text="No hay órdenes pagadas." %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="{% static 'sales/js/sales.js' %}"></script>
+{% endblock %}
